@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Dengue Fever Risk Map</title>
+
+  <!-- don't forget to call all of the stylesheets -->
+  <link href="/assets/bootstrap.min.css" rel="stylesheet" >
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.1/chroma.min.js"></script>
+
+  <style>
+    #map {width: 100%;height: calc(40vh);}
+    #about {max-height: calc(80vh);overflow-y: scroll;}
+    /* Small devices (landscape phones, 576px and up) */
+    @media (min-width: 576px) {}
+    /* Medium devices (tablets, 768px and up) */
+    @media (min-width: 768px) {#map {height: calc(60vh);}}
+    /* Large devices (desktops, 992px and up) */
+    @media (min-width: 992px) {#map {height: calc(80vh);}}
+    /* Extra large devices (large desktops, 1200px and up) */
+    @media (min-width: 1200px) {}
+  </style>
+
+<style>
+  html, body, #map { width: 100%; height: 100%; margin: 0; background: #fff; }
+
+
+    .legend {
+       line-height: 40px;
+       font-size: 16px;
+       width: 190px;
+       color: #333333;
+       padding: 6px 8px;
+       background: white;
+       box-shadow: 0 0 15px rgba(0,0,0,0.2);
+       border-radius: 5px;
+       
+   }
+
+   .legend i {
+       width: 20px;
+       height: 20px;
+       float: left;
+       margin-right: 8px;
+       
+   }
+
+   .legend img {
+       width: 16px;
+       height: 16px;
+       margin-right: 3px;
+       float: left;
+       
+   }
+
+  .legend p {
+       font-size: 14px;
+       line-height: 20px;
+       margin: 0;
+       
+   }
+
+   .legend {
+       font-family: 'Titillium Web', sans-serif;
+   }
+
+
+
+</style>
+
+</head>
+
+<body>
+<!-- now that we're in the body of our page, you can see it is broken up into three page sections, which are all held in a fluid div container-->
+
+  <div class="container-fluid">
+    <!-- this section defines the header part of the page, or first 'row'-->
+    <header class="row py-3 bg-dark text-white">
+      <div class="col mx-2">
+        <h1 class="h1" style="font-size: 45px;">Mapping Disease: The Spread of Dengue Fever Across South America</h1>
+      </div>
+    </header>
+
+    <!-- this section defines the 'middle' part of the page, broken up into two parts-->
+    <section class="row bg-light">
+      <!-- first, here's the "about" info section on the left-->
+      <aside id="about" class="col-12 col-md-5 col-lg-4 text-dark py-2">
+        <section>
+          <h2 class="h2 text-dark">Dengue Fever</h2>
+          <style>
+            /* Define the color for the link */
+            a {
+              color: red; /* Set the default color */
+            }
+          
+            /* Define the color for the link when hovered */
+            a:hover {
+              color: black; /* Set the color when hovered */
+            }
+          </style>
+          <p>New York Times Dengue Fever article can be found <a href="https://www.nytimes.com/2024/04/11/health/dengue-vaccine-brazil.html"target="_blank">here</a>.</p>
+
+          <p>The urgency for an improved Dengue vaccine intensifies as a massive outbreak sweeps through Latin America, with 
+            Brazil at the epicenter. This outbreak highlights the evolving nature of Dengue, which flourishes in densely 
+            populated regions and is worsened by the effects of climate change.</p>
+
+          <p>Brazilian researchers have recently announced a breakthrough in the form of a single-shot Dengue vaccine, offering hope 
+            amidst the crisis. Unlike existing vaccines, this new one uses weakened forms of all four Dengue virus strains. Instituto 
+            Butantan in São Paulo is set to produce this vaccine, with plans for regulatory approval and production in the near future.</p>
+
+          <p>However, the vaccine won't be available in time to address the current outbreak or potentially the next one, 
+            and its availability will be limited to Brazil. Meanwhile, other regions outside the Americas are also grappling with Dengue outbreaks. 
+            Severe Dengue cases can be fatal, particularly if untreated, and the current outbreak in Brazil is disproportionately affecting children.</p>
+
+          <p>The Brazilian government has secured a Japanese-made Dengue vaccine for children, but it's only enough to partially 
+            vaccinate a fraction of the population. The cost of existing vaccines is a significant barrier, with efforts underway to 
+            accelerate production and reduce costs.</p>
+
+          <p>For more information on the outbreak in South America click here: <a href="https://www.paho.org/en/news/28-3-2024-paho-calls-collective-action-response-record-increase-dengue-cases-americas#:~:text=While%20dengue%20is%20on%20the,cases%20and%2087%25%20of%20deaths"target="_blank">Dengue Article PAHO</a>.</p>
+        </section>
+      </aside>
+
+      <!-- second, here's the map div container, located on the right-->
+      <div class="col-12 col-md-7 col-lg-8 px-0">
+        <div id="map" class="bg-light position-relative"></div>
+      </div>
+    </section>
+
+    <!-- middle section has ended, now here's the page footer-->
+    <footer class="row bg-dark text-white py-3">
+      <div class="col mx-2">
+        <ul class="list-unstyled">
+          <li>Trevor Dowell</li>
+          <li>5 May 2024</li>
+          <li><a href="https://www3.paho.org/data/index.php/en/mnu-topics/indicadores-dengue-en/dengue-regional-en/261-dengue-reg-ano-en.html?start=1"target="_blank">Data Source</a></li>
+        </ul>
+      </div>
+    </footer>
+  </div> <!-- end of fluid container -->
+
+  <!--don't forget to call all of the necessary JS libraries -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.min.js"></script>
+
+  <!-- and then you can begin writing your JS for the map -->
+  <script>
+  
+
+  //JS map code goes here
+  var map = L.map('map', {
+      center: [-17.7832, -55.4915],
+      zoom: 3.25
+  });
+//add basemap
+  var Stadia_Outdoors = L.tileLayer('https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png', {
+	maxZoom: 20,
+	attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+
+
+
+// 6. Set function for color ramp
+colors = chroma.scale('Reds').colors(5); 
+ 
+ // this function manually defines your choropleth classification system
+ function setColor(risk) {
+  console.log(risk)
+     var id = 0;
+     if (risk == "Extremely High") { id = 4; } 
+     else if (risk == "High") { id = 3; } 
+     else if (risk == "Medium") { id = 2; } 
+     else if (risk == "Low") { id = 1; }
+console.log(id)
+     return colors[id];
+ }
+
+
+
+function style(feature) {
+  return {
+    fillColor: setColor(feature.properties.risk), 
+    weight: 2,
+    opacity: 1,
+    color: "white",
+    fillOpacity: 0.7
+  };
+}
+
+
+//add countries outline
+L.geoJson.ajax("assets/LAcountry.geojson", {
+    style: style
+  }).addTo(map);
+
+
+// 9. Create Leaflet Control Object for Legend
+var legend = L.control({position: 'topright'});
+ 
+ // 10. Function that runs when legend is added to map
+ legend.onAdd = function () {
+
+     // Create Div Element and Populate it with HTML
+     var div = L.DomUtil.create('div', 'legend');
+     //this line creates a title for the choropleth part of the legend
+     div.innerHTML += '<b>Dengue Risk Level</b><br />';
+     //notice the class breaks entered at the end of the next 5 lines
+     //the colors specify the shade of purple that we used to do the polygon shading
+     div.innerHTML += '<i style="background: ' + colors[4] + '; opacity: 1"></i><p> Extremely High Risk</p>';
+     div.innerHTML += '<i style="background: ' + colors[3] + '; opacity: 1"></i><p> High Risk</p>';
+     div.innerHTML += '<i style="background: ' + colors[2] + '; opacity: 1"></i><p> Medium Risk</p>';
+     div.innerHTML += '<i style="background: ' + colors[1] + '; opacity: 1"></i><p> Low Risk</p>';
+     return div;
+ };
+
+ // 11. Add a legend to map
+ legend.addTo(map);
+
+ // 12. Add a scale bar to map
+ L.control.scale({position: 'bottomright'}).addTo(map);
+
+//country popup
+L.geoJson.ajax("assets/LAcountry.geojson", {
+    style: style,
+    onEachFeature: function(feature, layer) {
+        layer.on({
+            mouseover: function(e) {
+                // Open the popup on mouseover
+                this.openPopup();
+            },
+            mouseout: function(e) {
+                // Close the popup on mouseout
+                this.closePopup();
+            }
+        });
+        layer.bindPopup('<b>Country: </b> ' + feature.properties.name + "<br><b>Risk level: </b>" + feature.properties.risk + "<br><b>Dengue Fever Cases: </b>" +feature.properties.DenCase); // Customize the popup content as needed
+    }
+}).addTo(map);   
+
+
+
+
+  </script>
+
+</body>
+</html>
